@@ -4,14 +4,14 @@ body {
 
 .menuList {
   position: absolute;
-  overflow: hidden;
   width: 50%;
   right: 0;
   height: 50%;
   user-select: none;
   content: strict;
   bottom: 10vh;
-  background-color: #00ff00; }
+  background-color: #00ff00;
+  padding-top: 6em; }
   .menuList a {
     display: block;
     text-align: right;

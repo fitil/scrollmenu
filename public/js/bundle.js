@@ -76,7 +76,7 @@ var _style = __webpack_require__(1);
 
 var _style2 = _interopRequireDefault(_style);
 
-var _gsap = __webpack_require__(6);
+var _gsap = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -89,81 +89,76 @@ document.querySelectorAll('.menuItem').forEach(function (element, index, array) 
 
 enableWheel();
 function wheel(e) {
+    disableWheel();
     if (e.deltaY < 0) {
-        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
-            var style = window.getComputedStyle(element);
-            var matrix = new WebKitCSSMatrix(style.webkitTransform);
-            switch (matrix.m42) {
-                case 0:
-                    matrix.m42 = 144;
-                    break;
-                case 24:
-                    matrix.m42 = 0;
-                    break;
-                case 48:
-                    matrix.m42 = 24;
-                    break;
-                case 72:
-                    matrix.m42 = 48;
-                    break;
-                case 96:
-                    matrix.m42 = 72;
-                    break;
-                case 120:
-                    matrix.m42 = 96;
-                    break;
-                case 144:
-                    matrix.m42 = 120;
-                    break;
-            }
-            if (matrix.m42 % 24 == 0) {
-                if (matrix.m42 == 144) {
-                    disableWheel();
-                    _gsap.TweenLite.fromTo(element, 0.5, { opacity: 0 }, { opacity: 1, onComplete: enableWheel() });
-                } else {
-                    disableWheel();
-                    _gsap.TweenLite.to(element, 0.5, { y: matrix.m42, onComplete: enableWheel() });
-                }
-            }
+        scrollItemDown().then(function (res) {
+            return enableWheel();
         });
     } else {
+        scrollItemUp().then(function (res) {
+            return enableWheel();
+        });
+    }
+}
+
+function changePosUp(pos, element, resolve) {
+    var matrix = {
+        '0': isInvis,
+        '24': isMiddle
+    };
+    var tl = new _gsap.TimelineMax();
+
+    function isInvis() {
+        tl.to(element, 0.5, { y: -48, opacity: 0, ease: Power3.easeOut }).set(element, { opacity: 0, y: 144, onComplete: function onComplete() {
+                return resolve();
+            } });
+    }
+
+    function isMiddle() {
+        tl.to(element, 0.5, { opacity: 1, y: pos - 24 });
+    }
+
+    return (matrix[pos] || matrix[24])();
+}
+
+function changePosDown(pos, element, resolve) {
+    var matrix = {
+        '144': isInvis,
+        '24': isMiddle
+    };
+    var tl = new _gsap.TimelineMax();
+
+    function isInvis() {
+        tl.to(element, 0.5, { opacity: 0, y: 192 }).set(element, { y: 0, onComplete: function onComplete() {
+                return resolve();
+            } });
+    }
+
+    function isMiddle() {
+        tl.to(element, 0.5, { opacity: 1, y: pos + 24 });
+    }
+
+    return (matrix[pos] || matrix[24])();
+}
+
+function scrollItemUp() {
+    return new Promise(function (resolve, reject) {
         document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
             var style = window.getComputedStyle(element);
             var matrix = new WebKitCSSMatrix(style.webkitTransform);
-            switch (matrix.m42) {
-                case 0:
-                    matrix.m42 = 24;
-                    break;
-                case 24:
-                    matrix.m42 = 48;
-                    break;
-                case 48:
-                    matrix.m42 = 72;
-                    break;
-                case 72:
-                    matrix.m42 = 96;
-                    break;
-                case 96:
-                    matrix.m42 = 120;
-                    break;
-                case 120:
-                    matrix.m42 = 144;
-                    break;
-                case 144:
-                    matrix.m42 = 0;
-                    break;
-            }
-            if (matrix.m42 % 24 == 0) {
-                if (matrix.m42 == 0) {
-                    disableWheel();
-                    _gsap.TweenLite.to(element, 0.5, { y: matrix.m42, onComplete: enableWheel() });
-                } else {
-                    disableWheel();
-                    _gsap.TweenLite.fromTo(element, 0.5, { opacity: 0 }, { opacity: 1, onComplete: enableWheel() });
-                }
-            }
+            changePosUp(matrix.m42, element, resolve);
         });
-    }
+    });
+}
+
+function scrollItemDown() {
+    return new Promise(function (resolve, reject) {
+        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
+            var style = window.getComputedStyle(element);
+            var matrix = new WebKitCSSMatrix(style.webkitTransform);
+            changePosDown(matrix.m42, element, resolve);
+        });
+    });
 }
 
 function disableWheel() {
@@ -186,11 +181,7 @@ function enableWheel() {
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -8159,10 +8150,10 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 7 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /*** IMPORTS FROM imports-loader ***/
