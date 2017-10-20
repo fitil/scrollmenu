@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0; }
+
+.menuList {
+  position: absolute;
+  overflow: hidden;
+  width: 50%;
+  right: 0;
+  height: 50%;
+  user-select: none;
+  content: strict;
+  bottom: 10vh;
+  background-color: #00ff00; }
+  .menuList a {
+    display: block;
+    text-align: right;
+    position: absolute;
+    height: 2em;
+    right: 0;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer; }

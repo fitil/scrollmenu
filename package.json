@@ -1,0 +1,41 @@
+{
+  "name": "tech",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --exec babel-node --presets env",
+    "web": "browser-sync start --server 'public' --files 'public'",
+    "dev": "node_modules/.bin/webpack --hide-modules --watch"
+  },
+  "author": "Serhii Dovgyi",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.18.13",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
+    "html-loader": "^0.5.1",
+    "html-webpack-plugin": "^2.30.1",
+    "image-webpack-loader": "^3.4.2",
+    "imports-loader": "^0.7.1",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.12.1",
+    "pug": "^2.0.0-rc.4",
+    "pug-html-loader": "^1.1.5",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {
+    "express": "^4.15.4",
+    "gsap": "^1.20.2",
+    "pixi.js": "^4.5.6",
+    "scrollmagic": "^2.0.5",
+    "vivus": "^0.4.2"
+  }
+}
