@@ -1,17 +1,31 @@
 body
     margin: 0
     padding: 0
-
+    color: #ffffff
+a
+    color: #ffffff
+#bg
+    position: fixed
+    width: 100vw
+    height: 100vh
+.container
+    display: -webkit-flex
+    display: flex
+.right
+    -webkit-justify-content: flex-end
+    justify-content: flex-end
+.column
+    -webkit-flex-direction: column
+    flex-direction: column
 .menuList
-    position: absolute
+    position: relative
     //overflow: hidden
     width: 50%
     right: 0
-    height: 50%
+    height: 40vh
     user-select: none
     content: strict
     bottom: 10vh
-    background-color: #00ff00
     padding-top: 6em
     a
         display: block
@@ -24,3 +38,17 @@ body
         font-size: 12px
         font-weight: 700
         cursor: pointer
+
+.headerList
+    position: relative
+    user-select: none
+    margin-right: 35px
+    margin-left: 35px
+    height: 30vh
+    .headerItem
+        position: relative
+        text-align: right
+        float: right
+        font-size: 60px
+        font-weight: 900
+        text-transform: uppercase

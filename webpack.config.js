@@ -22,6 +22,12 @@ module.exports = {
     publicPath: './',
     filename: 'js/bundle.js'
   },
+  resolve: {
+    extensions: ['.js'],
+    alias: {
+      ccimage: path.resolve('node_modules', 'canvas-image-cover')
+    }
+  },
   module: {
     rules: [
       { test: /\.js$/, loader: 'imports-loader?define=>false'},
