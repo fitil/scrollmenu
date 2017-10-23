@@ -1,0 +1,13 @@
+{
+    "active": 0,
+    "0": {
+        "title" : "first",
+        "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.",
+        "img"   : "../img/blacksnow-cover.jpg"
+    },
+    "1": {
+        "title" : "second",
+        "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+        "img"   : "../img/header-image.jpg"        
+    }
+}

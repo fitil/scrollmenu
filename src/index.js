@@ -1,6 +1,7 @@
 import style from './sass/style.sass'
 import {TimelineMax} from 'gsap'
 import cover from 'ccimage'
+import node from './js/node.json'
 
 let iteration = 0
 
@@ -8,6 +9,8 @@ document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
     element.style.transform = `translateY(${iteration}em)`
     iteration += 2
 })
+
+console.log(JSON.stringify(node))
 
 enableWheel()
 function wheel(e) {
@@ -95,13 +98,13 @@ function enableWheel() {
 
 let canvas = document.getElementById('bg'),
     ctx = canvas.getContext("2d")
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
 window.addEventListener('resize', resize)
 function resize() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
-    cover(image, 0, 0, window.innerWidth, window.innerHeight).render(ctx)
-    console.log('resized')
 }
 
 let image = new Image;

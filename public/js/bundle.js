@@ -82,6 +82,10 @@ var _ccimage = __webpack_require__(4);
 
 var _ccimage2 = _interopRequireDefault(_ccimage);
 
+var _node = __webpack_require__(5);
+
+var _node2 = _interopRequireDefault(_node);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var iteration = 0;
@@ -90,6 +94,8 @@ document.querySelectorAll('.menuItem').forEach(function (element, index, array) 
     element.style.transform = 'translateY(' + iteration + 'em)';
     iteration += 2;
 });
+
+console.log(JSON.stringify(_node2.default));
 
 enableWheel();
 function wheel(e) {
@@ -183,13 +189,13 @@ function enableWheel() {
 
 var canvas = document.getElementById('bg'),
     ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 window.addEventListener('resize', resize);
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    (0, _ccimage2.default)(image, 0, 0, window.innerWidth, window.innerHeight).render(ctx);
-    console.log('resized');
 }
 
 var image = new Image();
@@ -8314,6 +8320,12 @@ module.exports = (img, x, y, width, height) => {
 };
 
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = {"0":{"title":"first","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.","img":"../img/blacksnow-cover.jpg"},"1":{"title":"second","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/header-image.jpg"},"active":0}
 
 /***/ })
 /******/ ]);

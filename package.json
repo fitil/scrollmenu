@@ -32,6 +32,7 @@
     "webpack": "^3.6.0"
   },
   "dependencies": {
+    "canvas-image-cover": "^2.0.0",
     "express": "^4.15.4",
     "gsap": "^1.20.2",
     "pixi.js": "^4.5.6",
