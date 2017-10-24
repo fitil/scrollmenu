@@ -78,9 +78,9 @@ var _style2 = _interopRequireDefault(_style);
 
 var _gsap = __webpack_require__(2);
 
-var _ccimage = __webpack_require__(4);
+var _canvasImageCover = __webpack_require__(4);
 
-var _ccimage2 = _interopRequireDefault(_ccimage);
+var _canvasImageCover2 = _interopRequireDefault(_canvasImageCover);
 
 var _node = __webpack_require__(5);
 
@@ -88,94 +88,138 @@ var _node2 = _interopRequireDefault(_node);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import ScrollMagic from 'scrollmagic'
+//import 'animation.gsap'
+//import 'debug.addIndicators'
+
 var iteration = 0;
+// Canvas init
+var canvas = document.getElementById('bg'),
+    ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var curentImage = new Image();
+var prevImage = new Image();
+// if (node.item.length>1) {
+//     node.prevActive = node.item.length-1
+//     node.nextActive = node.active+1    
+// }
 
 document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
     element.style.transform = 'translateY(' + iteration + 'em)';
     iteration += 2;
 });
 
-console.log(JSON.stringify(_node2.default));
-
+var tl = new _gsap.TimelineMax();
 enableWheel();
+
 function wheel(e) {
-    disableWheel();
+    _node2.default.prevActive = _node2.default.active;
     if (e.deltaY < 0) {
-        scrollItemDown().then(function (res) {
-            return enableWheel();
-        });
+        console.log('wheel scrolled up');
+        if (_node2.default.active === 0) {
+            _node2.default.active = _node2.default.item.length - 1;
+        } else {
+            _node2.default.active -= 1;
+        }
+        animateImage();
+        //scrollItemDown().then(res=>enableWheel())
     } else {
-        scrollItemUp().then(function (res) {
-            return enableWheel();
-        });
+        console.log('wheel scrolled down');
+        if (_node2.default.active === _node2.default.item.length - 1) {
+            _node2.default.active = 0;
+        } else {
+            _node2.default.active += 1;
+        }
+        animateImage();
+        //scrollItemUp().then(res=>enableWheel())
     }
+    console.log(_node2.default.active);
 }
 
-function changePosUp(pos, element, resolve) {
-    var matrix = {
-        '0': is0,
-        '24': is24
-        //'192': is192
-    };
-    var tl = new _gsap.TimelineMax();
+// function changePage() {
+//     nextImage.src = node.item[node.prevActive].img
+// }
 
-    // function is192() {
-    //     tl.to(element, 0.5, {y: 120, opacity: 1, ease: Power3.easeOut})
-    // }
+// document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
+//     let style = window.getComputedStyle(element)
+//     let matrix = new WebKitCSSMatrix(style.webkitTransform)
+//     tl.to(element, 0.5, {opacity: 1, y: matrix.m42+24})
+//     let menuScene = new ScrollMagic.Scene({
+//         offset: 0,
+//         triggerElement: element,
+//         triggerHook: 0 
+//     })  
+//         .addIndicators({name:'MenuItem'})
+//         .addTo(controller)
+//         .setTween(tl)
+// })
 
-    function is0() {
-        tl.to(element, 0.5, { y: -48, opacity: 0, ease: Power3.easeOut }).set(element, { opacity: 0, y: 144, onComplete: function onComplete() {
-                return resolve();
-            } });
-    }
-    function is24() {
-        tl.to(element, 0.5, { opacity: 1, y: pos - 24 });
-    }
+// console.log(JSON.stringify(node))
 
-    return (matrix[pos] || matrix[24])();
-}
+// function changePosUp(pos, element, resolve) {
+//     let matrix ={
+//         '0': is0,
+//         '24': is24
+//         //'192': is192
+//     }
+//     let tl = new TimelineMax()
 
-function changePosDown(pos, element, resolve) {
-    var matrix = {
-        '144': isInvis,
-        //'-48': isUvisible,
-        '24': isMiddle
-    };
-    var tl = new _gsap.TimelineMax();
-    function isInvis() {
-        tl.to(element, 0.5, { opacity: 0, y: 192 }).set(element, { opacity: 0, y: 0, onComplete: function onComplete() {
-                return resolve();
-            } });
-    }
-    // function isUvisible() {
-    //     tl.to(element, 0.5, {opacity: 1, y: 24, ease: Power3.easeOut})
-    // }
-    function isMiddle() {
-        tl.to(element, 0.5, { opacity: 1, y: pos + 24 });
-    }
+//     // function is192() {
+//     //     tl.to(element, 0.5, {y: 120, opacity: 1, ease: Power3.easeOut})
+//     // }
 
-    return (matrix[pos] || matrix[24])();
-}
+//     function is0() {
+//         tl.to(element, 0.5, {y: -48, opacity: 0, ease: Power3.easeOut})
+//             .set(element, {opacity: 0, y: 144, onComplete: ()=>resolve()})
+//     }
+//     function is24() {
+//         tl.to(element, 0.5, {opacity: 1, y: pos-24})
+//     }
 
-function scrollItemUp() {
-    return new Promise(function (resolve, reject) {
-        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
-            var style = window.getComputedStyle(element);
-            var matrix = new WebKitCSSMatrix(style.webkitTransform);
-            changePosUp(matrix.m42, element, resolve);
-        });
-    });
-}
+//     return (matrix[pos] || matrix[24])()    
+// }
 
-function scrollItemDown() {
-    return new Promise(function (resolve, reject) {
-        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
-            var style = window.getComputedStyle(element);
-            var matrix = new WebKitCSSMatrix(style.webkitTransform);
-            changePosDown(matrix.m42, element, resolve);
-        });
-    });
-}
+// function changePosDown(pos, element, resolve) {
+//     let matrix ={
+//         '144': isInvis,
+//         //'-48': isUvisible,
+//         '24': isMiddle
+//     }
+//     let tl = new TimelineMax()
+//     function isInvis() {
+//         tl.to(element, 0.5, {opacity: 0, y: 192})
+//             .set(element, {opacity: 0, y: 0, onComplete: ()=>resolve()})
+//     }
+//     // function isUvisible() {
+//     //     tl.to(element, 0.5, {opacity: 1, y: 24, ease: Power3.easeOut})
+//     // }
+//     function isMiddle() {
+//         tl.to(element, 0.5, {opacity: 1, y: pos+24})
+//     }
+
+//     return (matrix[pos] || matrix[24])()    
+// }
+
+// function scrollItemUp(){
+//     return new Promise((resolve, reject) => {
+//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
+//             let style = window.getComputedStyle(element)
+//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
+//             changePosUp(matrix.m42, element, resolve)
+//         })
+//     })
+// }
+
+// function scrollItemDown() {
+//     return new Promise((resolve, reject) => {
+//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
+//             let style = window.getComputedStyle(element)
+//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
+//             changePosDown(matrix.m42, element, resolve)
+//         })
+//     })
+// }
 
 function disableWheel() {
     document.removeEventListener('mousewheel', wheel);
@@ -187,29 +231,35 @@ function enableWheel() {
     document.addEventListener('DOMMouseScroll', wheel);
 }
 
-var canvas = document.getElementById('bg'),
-    ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 window.addEventListener('resize', resize);
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    animateImage();
 }
 
-var image = new Image();
-image.src = '../img/header-image.jpg';
-
-function render() {
-    (0, _ccimage2.default)(image, 0, 0, canvas.width, canvas.height).render(ctx);
+function animateImage() {
+    curentImage.src = _node2.default.item[_node2.default.active].img;
+    curentImage.globalAlpha = 0;
+    curentImage.DX = canvas.height;
+    prevImage.src = _node2.default.item[_node2.default.prevActive].img;
+    prevImage.globalAlpha = 1;
+    _gsap.TweenMax.ticker.addEventListener('tick', function () {
+        render(curentImage.DX);
+    });
+    var tl = new _gsap.TimelineMax();
+    tl.to(curentImage, 1, { globalAlpha: 1, DX: 0 }).to(prevImage, 1, { globalAlpha: 0 }, "-=1");
 }
 
-draw();
-function draw() {
-    render();
-    window.requestAnimationFrame(draw);
+function render(curentDX) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = prevImage.globalAlpha;
+    (0, _canvasImageCover2.default)(prevImage, 0, 0, canvas.width, canvas.height).render(ctx);
+    ctx.globalAlpha = curentImage.globalAlpha;
+    (0, _canvasImageCover2.default)(curentImage, 0, curentDX, canvas.width, canvas.height).render(ctx);
 }
+
+animateImage();
 
 
 /***/ }),
@@ -8325,7 +8375,7 @@ module.exports = (img, x, y, width, height) => {
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = {"0":{"title":"first","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.","img":"../img/blacksnow-cover.jpg"},"1":{"title":"second","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/header-image.jpg"},"active":0}
+module.exports = {"prevActive":0,"active":0,"item":[{"title":"first","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.","img":"../img/blacksnow-cover.jpg"},{"title":"second","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/header-image.jpg"},{"title":"third","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/brain-header.jpg"},{"title":"forth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/bownty-header-1.jpg"},{"title":"fifth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/cover-rokoko.jpg"},{"title":"sixth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/nord-cover.jpg"},{"title":"seventh","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/rebelle-cover.jpg"}]}
 
 /***/ })
 /******/ ]);

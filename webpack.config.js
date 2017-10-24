@@ -25,7 +25,9 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     alias: {
-      ccimage: path.resolve('node_modules', 'canvas-image-cover')
+      'canvas-image-cover': path.resolve('node_modules', 'canvas-image-cover'),
+      'animation.gsap': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
+      'debug.addIndicators': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js')
     }
   },
   module: {

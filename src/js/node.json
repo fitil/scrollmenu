@@ -1,13 +1,41 @@
 {
+    "prevActive": 0,
     "active": 0,
-    "0": {
-        "title" : "first",
-        "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.",
-        "img"   : "../img/blacksnow-cover.jpg"
-    },
-    "1": {
-        "title" : "second",
-        "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
-        "img"   : "../img/header-image.jpg"        
-    }
+    "item":[
+        {
+            "title" : "first",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.",
+            "img"   : "../img/blacksnow-cover.jpg"
+        },
+        {
+            "title" : "second",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/header-image.jpg"        
+        },
+        {
+            "title" : "third",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/brain-header.jpg"            
+        },
+        {
+            "title" : "forth",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/bownty-header-1.jpg"            
+        },
+        {
+            "title" : "fifth",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/cover-rokoko.jpg"            
+        },
+        {
+            "title" : "sixth",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/nord-cover.jpg"            
+        },
+        {
+            "title" : "seventh",
+            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "img"   : "../img/rebelle-cover.jpg"            
+        }
+    ]
 }
