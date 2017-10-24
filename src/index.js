@@ -6,7 +6,7 @@ import node from './js/node.json'
 //import 'animation.gsap'
 //import 'debug.addIndicators'
 
-let iteration = 0
+let iteration = 2
 // Canvas init
 let canvas = document.getElementById('bg'),
 ctx = canvas.getContext("2d")
@@ -14,17 +14,22 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 let curentImage = new Image
 let prevImage = new Image
-// if (node.item.length>1) {
-//     node.prevActive = node.item.length-1
-//     node.nextActive = node.active+1    
-// }
+let tl = new TimelineMax()
+
+TweenMax.fromTo(`.headerItem.item${node.active}`, 1, {y: 200}, {y: 0, opacity: 1})
+TweenMax.set(`.menuItem.item${node.active}`, {opacity: 0, y: 168})
+TweenMax.fromTo('.content', 1, {opacity: 0, y: 200}, {opacity: 1, y: 0})
+
+let content = document.createTextNode(node.item[node.active].body)
+document.getElementById('content').appendChild(content)
 
 document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-    element.style.transform = `translateY(${iteration}em)`
-    iteration += 2
+    if(index!=0) {
+        element.style.transform = `translateY(${iteration}em)`
+        iteration += 2    
+    }
 })
 
-let tl = new TimelineMax()
 enableWheel()
 
 function wheel(e) {
@@ -35,105 +40,101 @@ function wheel(e) {
             node.active = node.item.length-1    
         } else {
             node.active -= 1
-        } 
-        animateImage()
-        //scrollItemDown().then(res=>enableWheel())
+        }
+        document.getElementById('content').removeChild(content)
+        content = document.createTextNode(node.item[node.active].body)
+        document.getElementById('content').appendChild(content)
+        animateImageUp()
+        changePageUp()
+        disableWheel()
+        scrollItemDown().then(res=>enableWheel())
     } else {
         console.log('wheel scrolled down')
         if (node.active === node.item.length-1) {
             node.active = 0    
         } else {
             node.active += 1
-        } 
-        animateImage()
-        //scrollItemUp().then(res=>enableWheel())
+        }
+        document.getElementById('content').removeChild(content)
+        content = document.createTextNode(node.item[node.active].body)
+        document.getElementById('content').appendChild(content)
+        animateImageUp()
+        changePageDown()
+        disableWheel()
+        scrollItemUp().then(res=>enableWheel())
     }
     console.log(node.active)
 }
 
-// function changePage() {
-//     nextImage.src = node.item[node.prevActive].img
-// }
+function changePageDown() {
+    TweenMax.fromTo(`.headerItem.item${node.active}`, 1, {y: 200}, {y: 0, opacity: 1})
+    TweenMax.to(`.headerItem.item${node.prevActive}`, 1, {y: -50, opacity: 0})
+    TweenMax.set('.container', {className: `+=${node.item[node.active].title}`})
+    TweenMax.set('.container', {className: `-=${node.item[node.prevActive].title}`})
+    TweenMax.fromTo('.content', 1, {opacity: 0, y: 200}, {opacity: 1, y: 0})
+}
+function changePageUp() {
+    TweenMax.fromTo(`.headerItem.item${node.active}`, 1, {y: -200}, {y: 0, opacity: 1})
+    TweenMax.to(`.headerItem.item${node.prevActive}`, 1, {y: 50, opacity: 0})
+    TweenMax.set('.container', {className: `+=${node.item[node.active].title}`})
+    TweenMax.set('.container', {className: `-=${node.item[node.prevActive].title}`})
+    TweenMax.fromTo('.content', 1, {opacity: 0, y: 200}, {opacity: 1, y: 0})
+}
 
-// document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//     let style = window.getComputedStyle(element)
-//     let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//     tl.to(element, 0.5, {opacity: 1, y: matrix.m42+24})
-//     let menuScene = new ScrollMagic.Scene({
-//         offset: 0,
-//         triggerElement: element,
-//         triggerHook: 0 
-//     })  
-//         .addIndicators({name:'MenuItem'})
-//         .addTo(controller)
-//         .setTween(tl)
-// })
+function changePosUp(pos, element, resolve) {
+    let matrix ={
+        '24': is0,
+        'default': is24
+    }
+    let tl1 = new TimelineMax()
+    function is0() {
+        tl1.to(element, 0.5, {y: -50, opacity: 0, ease: Power3.easeOut})
+            .set(element, {opacity: 0, y: 168, onComplete: ()=>resolve()})
+    }
+    function is24() {
+        tl1.to(element, 0.5, {opacity: 1, y: pos-24})
+    }
+    return (matrix[pos] || matrix['default'])()    
+}
 
-// console.log(JSON.stringify(node))
+function changePosDown(pos, element, resolve) {
+    let matrix ={
+        '144': isInvis,
+        '168': isVisible,
+        'default': isMiddle
+    }
+    let tl2 = new TimelineMax()
+    function isInvis() {
+        tl2.to(element, 0.5, {opacity: 0, y: 168, onComplete: ()=>resolve()})
+    }
+    function isVisible() {
+        tl2.fromTo(element, 0.5, {opacity: 0, y: -50}, {opacity: 1, y: 24})
+    }
+    function isMiddle() {
+        tl2.to(element, 0.5, {opacity: 1, y: pos+24})
+    }
+    return (matrix[pos] || matrix['default'])()    
+}
 
-// function changePosUp(pos, element, resolve) {
-//     let matrix ={
-//         '0': is0,
-//         '24': is24
-//         //'192': is192
-//     }
-//     let tl = new TimelineMax()
-    
-//     // function is192() {
-//     //     tl.to(element, 0.5, {y: 120, opacity: 1, ease: Power3.easeOut})
-//     // }
+function scrollItemUp(){
+    return new Promise((resolve, reject) => {
+        document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
+            let style = window.getComputedStyle(element)
+            let matrix = new WebKitCSSMatrix(style.webkitTransform)
+            changePosUp(matrix.m42, element, resolve)
+        })
+    })
+}
 
-//     function is0() {
-//         tl.to(element, 0.5, {y: -48, opacity: 0, ease: Power3.easeOut})
-//             .set(element, {opacity: 0, y: 144, onComplete: ()=>resolve()})
-//     }
-//     function is24() {
-//         tl.to(element, 0.5, {opacity: 1, y: pos-24})
-//     }
-
-//     return (matrix[pos] || matrix[24])()    
-// }
-
-// function changePosDown(pos, element, resolve) {
-//     let matrix ={
-//         '144': isInvis,
-//         //'-48': isUvisible,
-//         '24': isMiddle
-//     }
-//     let tl = new TimelineMax()
-//     function isInvis() {
-//         tl.to(element, 0.5, {opacity: 0, y: 192})
-//             .set(element, {opacity: 0, y: 0, onComplete: ()=>resolve()})
-//     }
-//     // function isUvisible() {
-//     //     tl.to(element, 0.5, {opacity: 1, y: 24, ease: Power3.easeOut})
-//     // }
-//     function isMiddle() {
-//         tl.to(element, 0.5, {opacity: 1, y: pos+24})
-//     }
-
-//     return (matrix[pos] || matrix[24])()    
-// }
-
-// function scrollItemUp(){
-//     return new Promise((resolve, reject) => {
-//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//             let style = window.getComputedStyle(element)
-//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//             changePosUp(matrix.m42, element, resolve)
-//         })
-//     })
-// }
-
-// function scrollItemDown() {
-//     return new Promise((resolve, reject) => {
-//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//             let style = window.getComputedStyle(element)
-//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//             changePosDown(matrix.m42, element, resolve)
-//         })
-//     })
-// }
+function scrollItemDown() {
+    return new Promise((resolve, reject) => {
+        document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
+            let style = window.getComputedStyle(element)
+            let matrix = new WebKitCSSMatrix(style.webkitTransform)
+            changePosDown(matrix.m42, element, resolve)
+        })
+    })
+}
 
 function disableWheel() {
     document.removeEventListener('mousewheel', wheel);
@@ -149,10 +150,10 @@ window.addEventListener('resize', resize)
 function resize() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
-    animateImage()
+    animateImageUp()
 }
 
-function animateImage() {
+function animateImageUp() {
     curentImage.src = node.item[node.active].img
     curentImage.globalAlpha = 0
     curentImage.DX = canvas.height
@@ -175,4 +176,4 @@ function render(curentDX) {
     
 }
 
-animateImage()
+animateImageUp()

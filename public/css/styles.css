@@ -8,30 +8,23 @@ a {
 
 #bg {
   position: fixed;
+  top: 0;
   width: 100vw;
   height: 100vh; }
 
 .container {
-  display: -webkit-flex;
-  display: flex; }
-
-.right {
-  -webkit-justify-content: flex-end;
-  justify-content: flex-end; }
-
-.column {
-  -webkit-flex-direction: column;
-  flex-direction: column; }
+  margin-right: 35px;
+  margin-left: 35px; }
 
 .menuList {
   position: relative;
+  overflow: hidden;
   width: 50%;
   right: 0;
   height: 40vh;
   user-select: none;
   content: strict;
-  bottom: 10vh;
-  padding-top: 6em; }
+  padding-top: 3em; }
   .menuList a {
     display: block;
     text-align: right;
@@ -47,14 +40,61 @@ a {
 .headerList {
   position: relative;
   user-select: none;
-  margin-right: 35px;
-  margin-left: 35px;
-  height: 30vh;
-  overflow: hidden; }
+  height: 26vh;
+  overflow: hidden;
+  margin-top: 45px;
+  border-top: 2px solid;
+  border-bottom: 2px solid; }
   .headerList .headerItem {
-    position: relative;
-    text-align: right;
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
     font-size: 60px;
     font-weight: 900;
-    text-transform: uppercase; }
+    text-transform: uppercase;
+    opacity: 0; }
+
+.fifth {
+  color: #FC434C;
+  border-color: #FC434C; }
+  .fifth a {
+    color: #FC434C; }
+
+.sixth {
+  color: #4CCCA3;
+  border-color: #4CCCA3; }
+  .sixth a {
+    color: #4CCCA3; }
+
+.seventh {
+  color: #E1B156;
+  border-color: #E1B156; }
+  .seventh a {
+    color: #E1B156; }
+
+.fourth {
+  color: #00D8C9;
+  border-color: #00D8C9; }
+  .fourth a {
+    color: #00D8C9; }
+
+.third {
+  color: #45DCFC;
+  border-color: #45DCFC; }
+  .third a {
+    color: #45DCFC; }
+
+.flexcontainer {
+  display: flex;
+  position: relative;
+  overflow: hidden; }
+  .flexcontainer .flexitem {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap; }
+
+.content {
+  padding-top: 3em;
+  font-size: 18px;
+  line-height: 24px; }

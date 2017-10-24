@@ -92,7 +92,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //import 'animation.gsap'
 //import 'debug.addIndicators'
 
-var iteration = 0;
+var iteration = 2;
 // Canvas init
 var canvas = document.getElementById('bg'),
     ctx = canvas.getContext("2d");
@@ -100,17 +100,22 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var curentImage = new Image();
 var prevImage = new Image();
-// if (node.item.length>1) {
-//     node.prevActive = node.item.length-1
-//     node.nextActive = node.active+1    
-// }
+var tl = new _gsap.TimelineMax();
+
+_gsap.TweenMax.fromTo('.headerItem.item' + _node2.default.active, 1, { y: 200 }, { y: 0, opacity: 1 });
+_gsap.TweenMax.set('.menuItem.item' + _node2.default.active, { opacity: 0, y: 168 });
+_gsap.TweenMax.fromTo('.content', 1, { opacity: 0, y: 200 }, { opacity: 1, y: 0 });
+
+var content = document.createTextNode(_node2.default.item[_node2.default.active].body);
+document.getElementById('content').appendChild(content);
 
 document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
-    element.style.transform = 'translateY(' + iteration + 'em)';
-    iteration += 2;
+    if (index != 0) {
+        element.style.transform = 'translateY(' + iteration + 'em)';
+        iteration += 2;
+    }
 });
 
-var tl = new _gsap.TimelineMax();
 enableWheel();
 
 function wheel(e) {
@@ -122,8 +127,15 @@ function wheel(e) {
         } else {
             _node2.default.active -= 1;
         }
-        animateImage();
-        //scrollItemDown().then(res=>enableWheel())
+        document.getElementById('content').removeChild(content);
+        content = document.createTextNode(_node2.default.item[_node2.default.active].body);
+        document.getElementById('content').appendChild(content);
+        animateImageUp();
+        changePageUp();
+        disableWheel();
+        scrollItemDown().then(function (res) {
+            return enableWheel();
+        });
     } else {
         console.log('wheel scrolled down');
         if (_node2.default.active === _node2.default.item.length - 1) {
@@ -131,95 +143,91 @@ function wheel(e) {
         } else {
             _node2.default.active += 1;
         }
-        animateImage();
-        //scrollItemUp().then(res=>enableWheel())
+        document.getElementById('content').removeChild(content);
+        content = document.createTextNode(_node2.default.item[_node2.default.active].body);
+        document.getElementById('content').appendChild(content);
+        animateImageUp();
+        changePageDown();
+        disableWheel();
+        scrollItemUp().then(function (res) {
+            return enableWheel();
+        });
     }
     console.log(_node2.default.active);
 }
 
-// function changePage() {
-//     nextImage.src = node.item[node.prevActive].img
-// }
+function changePageDown() {
+    _gsap.TweenMax.fromTo('.headerItem.item' + _node2.default.active, 1, { y: 200 }, { y: 0, opacity: 1 });
+    _gsap.TweenMax.to('.headerItem.item' + _node2.default.prevActive, 1, { y: -50, opacity: 0 });
+    _gsap.TweenMax.set('.container', { className: '+=' + _node2.default.item[_node2.default.active].title });
+    _gsap.TweenMax.set('.container', { className: '-=' + _node2.default.item[_node2.default.prevActive].title });
+    _gsap.TweenMax.fromTo('.content', 1, { opacity: 0, y: 200 }, { opacity: 1, y: 0 });
+}
+function changePageUp() {
+    _gsap.TweenMax.fromTo('.headerItem.item' + _node2.default.active, 1, { y: -200 }, { y: 0, opacity: 1 });
+    _gsap.TweenMax.to('.headerItem.item' + _node2.default.prevActive, 1, { y: 50, opacity: 0 });
+    _gsap.TweenMax.set('.container', { className: '+=' + _node2.default.item[_node2.default.active].title });
+    _gsap.TweenMax.set('.container', { className: '-=' + _node2.default.item[_node2.default.prevActive].title });
+    _gsap.TweenMax.fromTo('.content', 1, { opacity: 0, y: 200 }, { opacity: 1, y: 0 });
+}
 
-// document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//     let style = window.getComputedStyle(element)
-//     let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//     tl.to(element, 0.5, {opacity: 1, y: matrix.m42+24})
-//     let menuScene = new ScrollMagic.Scene({
-//         offset: 0,
-//         triggerElement: element,
-//         triggerHook: 0 
-//     })  
-//         .addIndicators({name:'MenuItem'})
-//         .addTo(controller)
-//         .setTween(tl)
-// })
+function changePosUp(pos, element, resolve) {
+    var matrix = {
+        '24': is0,
+        'default': is24
+    };
+    var tl1 = new _gsap.TimelineMax();
+    function is0() {
+        tl1.to(element, 0.5, { y: -50, opacity: 0, ease: Power3.easeOut }).set(element, { opacity: 0, y: 168, onComplete: function onComplete() {
+                return resolve();
+            } });
+    }
+    function is24() {
+        tl1.to(element, 0.5, { opacity: 1, y: pos - 24 });
+    }
+    return (matrix[pos] || matrix['default'])();
+}
 
-// console.log(JSON.stringify(node))
+function changePosDown(pos, element, resolve) {
+    var matrix = {
+        '144': isInvis,
+        '168': isVisible,
+        'default': isMiddle
+    };
+    var tl2 = new _gsap.TimelineMax();
+    function isInvis() {
+        tl2.to(element, 0.5, { opacity: 0, y: 168, onComplete: function onComplete() {
+                return resolve();
+            } });
+    }
+    function isVisible() {
+        tl2.fromTo(element, 0.5, { opacity: 0, y: -50 }, { opacity: 1, y: 24 });
+    }
+    function isMiddle() {
+        tl2.to(element, 0.5, { opacity: 1, y: pos + 24 });
+    }
+    return (matrix[pos] || matrix['default'])();
+}
 
-// function changePosUp(pos, element, resolve) {
-//     let matrix ={
-//         '0': is0,
-//         '24': is24
-//         //'192': is192
-//     }
-//     let tl = new TimelineMax()
+function scrollItemUp() {
+    return new Promise(function (resolve, reject) {
+        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
+            var style = window.getComputedStyle(element);
+            var matrix = new WebKitCSSMatrix(style.webkitTransform);
+            changePosUp(matrix.m42, element, resolve);
+        });
+    });
+}
 
-//     // function is192() {
-//     //     tl.to(element, 0.5, {y: 120, opacity: 1, ease: Power3.easeOut})
-//     // }
-
-//     function is0() {
-//         tl.to(element, 0.5, {y: -48, opacity: 0, ease: Power3.easeOut})
-//             .set(element, {opacity: 0, y: 144, onComplete: ()=>resolve()})
-//     }
-//     function is24() {
-//         tl.to(element, 0.5, {opacity: 1, y: pos-24})
-//     }
-
-//     return (matrix[pos] || matrix[24])()    
-// }
-
-// function changePosDown(pos, element, resolve) {
-//     let matrix ={
-//         '144': isInvis,
-//         //'-48': isUvisible,
-//         '24': isMiddle
-//     }
-//     let tl = new TimelineMax()
-//     function isInvis() {
-//         tl.to(element, 0.5, {opacity: 0, y: 192})
-//             .set(element, {opacity: 0, y: 0, onComplete: ()=>resolve()})
-//     }
-//     // function isUvisible() {
-//     //     tl.to(element, 0.5, {opacity: 1, y: 24, ease: Power3.easeOut})
-//     // }
-//     function isMiddle() {
-//         tl.to(element, 0.5, {opacity: 1, y: pos+24})
-//     }
-
-//     return (matrix[pos] || matrix[24])()    
-// }
-
-// function scrollItemUp(){
-//     return new Promise((resolve, reject) => {
-//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//             let style = window.getComputedStyle(element)
-//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//             changePosUp(matrix.m42, element, resolve)
-//         })
-//     })
-// }
-
-// function scrollItemDown() {
-//     return new Promise((resolve, reject) => {
-//         document.querySelectorAll('.menuItem').forEach( (element, index, array) => {
-//             let style = window.getComputedStyle(element)
-//             let matrix = new WebKitCSSMatrix(style.webkitTransform)
-//             changePosDown(matrix.m42, element, resolve)
-//         })
-//     })
-// }
+function scrollItemDown() {
+    return new Promise(function (resolve, reject) {
+        document.querySelectorAll('.menuItem').forEach(function (element, index, array) {
+            var style = window.getComputedStyle(element);
+            var matrix = new WebKitCSSMatrix(style.webkitTransform);
+            changePosDown(matrix.m42, element, resolve);
+        });
+    });
+}
 
 function disableWheel() {
     document.removeEventListener('mousewheel', wheel);
@@ -235,10 +243,10 @@ window.addEventListener('resize', resize);
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    animateImage();
+    animateImageUp();
 }
 
-function animateImage() {
+function animateImageUp() {
     curentImage.src = _node2.default.item[_node2.default.active].img;
     curentImage.globalAlpha = 0;
     curentImage.DX = canvas.height;
@@ -259,7 +267,7 @@ function render(curentDX) {
     (0, _canvasImageCover2.default)(curentImage, 0, curentDX, canvas.width, canvas.height).render(ctx);
 }
 
-animateImage();
+animateImageUp();
 
 
 /***/ }),
@@ -8375,7 +8383,7 @@ module.exports = (img, x, y, width, height) => {
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = {"prevActive":0,"active":0,"item":[{"title":"first","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.","img":"../img/blacksnow-cover.jpg"},{"title":"second","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/header-image.jpg"},{"title":"third","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/brain-header.jpg"},{"title":"forth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/bownty-header-1.jpg"},{"title":"fifth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/cover-rokoko.jpg"},{"title":"sixth","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/nord-cover.jpg"},{"title":"seventh","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/rebelle-cover.jpg"}]}
+module.exports = {"prevActive":1,"active":0,"item":[{"title":"first","body":"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero iste error architecto.","img":"../img/blacksnow-cover.jpg"},{"title":"second","body":"Amet ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/header-image.jpg"},{"title":"third","body":"Ferera ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/brain-header.jpg"},{"title":"fourth","body":"Ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/bownty-header-1.jpg"},{"title":"fifth","body":"Dolor ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/cover-rokoko.jpg"},{"title":"sixth","body":"Enem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/nord-cover.jpg"},{"title":"seventh","body":"Such ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.","img":"../img/rebelle-cover.jpg"}]}
 
 /***/ })
 /******/ ]);

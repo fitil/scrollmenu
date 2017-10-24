@@ -1,5 +1,5 @@
 {
-    "prevActive": 0,
+    "prevActive": 1,
     "active": 0,
     "item":[
         {
@@ -9,32 +9,32 @@
         },
         {
             "title" : "second",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "body"  : "Amet ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/header-image.jpg"        
         },
         {
             "title" : "third",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "body"  : "Ferera ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/brain-header.jpg"            
         },
         {
-            "title" : "forth",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "title" : "fourth",
+            "body"  : "Ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/bownty-header-1.jpg"            
         },
         {
             "title" : "fifth",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "body"  : "Dolor ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/cover-rokoko.jpg"            
         },
         {
             "title" : "sixth",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "body"  : "Enem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/nord-cover.jpg"            
         },
         {
             "title" : "seventh",
-            "body"  : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
+            "body"  : "Such ipsum dolor sit amet, consectetur adipisicing elit. Quisquam nam, dolorem deleniti.",
             "img"   : "../img/rebelle-cover.jpg"            
         }
     ]

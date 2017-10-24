@@ -8,20 +8,22 @@ html(lang="en")
         title Document
     body
         canvas#bg
-        .headerList.container.column
-            h2.headerItem first
-            h2.headerItem second
-            h2.headerItem third
-            h2.headerItem fourth
-            h2.headerItem fifth
-            h2.headerItem sixth
-            h2.headerItem seventh
-        .container.right
-            .menuList
-                a.menuItem(href="#") first
-                a.menuItem(href="#") second
-                a.menuItem(href="#") third
-                a.menuItem(href="#") fourth
-                a.menuItem(href="#") fifth
-                a.menuItem(href="#") sixth
-                a.menuItem(href="#") seventh
+        .container
+            .headerList.column
+                h2.headerItem.item0 first
+                h2.headerItem.item1 second
+                h2.headerItem.item2 third
+                h2.headerItem.item3 fourth
+                h2.headerItem.item4 fifth
+                h2.headerItem.item5 sixth
+                h2.headerItem.item6 seventh
+            .flexcontainer
+                .content#content.flexitem
+                .menuList.flexitem
+                    a.menuItem.item0(href="#") first
+                    a.menuItem.item1(href="#") second
+                    a.menuItem.item2(href="#") third
+                    a.menuItem.item3(href="#") fourth
+                    a.menuItem.item4(href="#") fifth
+                    a.menuItem.item5(href="#") sixth
+                    a.menuItem.item6(href="#") seventh
